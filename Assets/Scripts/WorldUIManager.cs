@@ -88,11 +88,17 @@ public class WorldUIManager : MonoBehaviour
         Debug.Log("Wereld geselecteerd: " + world.name);
         ChosenWorld = world;
         Debug.Log(ChosenWorld.name);
-        
+
         ChosenWorldId = Guid.Parse(ChosenWorld.id);
         WorldManager.Instance.WorldId = ChosenWorldId;
+
+        // 🌍 Sla de gekozen wereld-ID op in PlayerPrefs
+        PlayerPrefs.SetString("currentWorldId", ChosenWorldId.ToString());
+        PlayerPrefs.Save();
+
         SceneManager.LoadScene("HomeScene");
     }
+
     void DeleteWorld(Environment2D world)
     {
         Debug.Log("Verwijderen van wereld: " + world.name);

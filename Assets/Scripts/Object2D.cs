@@ -1,15 +1,11 @@
-using System;
-using System.Runtime.Serialization;
-using UnityEngine;
-using UnityEngine.Events;
+﻿using UnityEngine;
 
 public class Object2D : MonoBehaviour
 {
     public ObjectManager objectManager;
-
     public bool isDragging = false;
 
-    public void Update()
+    private void Update()
     {
         if (isDragging)
             this.transform.position = GetMousePosition();
@@ -22,6 +18,7 @@ public class Object2D : MonoBehaviour
         if (!isDragging)
         {
             objectManager.ShowMenu();
+            SaveObject();
         }
     }
 
@@ -32,4 +29,16 @@ public class Object2D : MonoBehaviour
         return positionInWorld;
     }
 
+    private void SaveObject()
+    {
+        int prefabId = 1; // Pas aan naar een juiste ID als je prefab IDs hebt
+        float x = transform.position.x;
+        float y = transform.position.y;
+        float scaleX = transform.localScale.x;
+        float scaleY = transform.localScale.y;
+        float rotation = transform.rotation.eulerAngles.z;
+        int layer = gameObject.layer;
+
+        objectManager.SaveObjectToAPI(prefabId, x, y, scaleX, scaleY, rotation, layer);
+    }
 }

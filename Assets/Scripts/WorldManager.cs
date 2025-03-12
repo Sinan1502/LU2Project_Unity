@@ -155,4 +155,26 @@ public class WorldManager : MonoBehaviour
         }
         DontDestroyOnLoad(this);
     }
+    public async void SaveObjectToAPI(int prefabId, float x, float y, float scaleX, float scaleY, float rotation, int layer)
+    {
+        string environmentId = PlayerPrefs.GetString("currentWorldId", "");
+
+        if (string.IsNullOrEmpty(environmentId))
+        {
+            Debug.LogError("Geen environmentId gevonden! Kan object niet opslaan.");
+            return;
+        }
+
+        GameObject2D obj = new GameObject2D(environmentId, prefabId, x, y, scaleX, scaleY, rotation, layer);
+        string jsonData = JsonUtility.ToJson(obj);
+
+        string apiUrl = "https://avansict2235816.azurewebsites.net/Object2D"; // Pas de endpoint aan indien nodig
+        string response = await PerformApiCall(apiUrl, "POST", jsonData);
+
+        if (!string.IsNullOrEmpty(response))
+        {
+            Debug.Log("Object succesvol opgeslagen!");
+        }
+    }
+
 }
